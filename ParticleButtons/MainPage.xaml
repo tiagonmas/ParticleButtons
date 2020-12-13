@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ParticleButtons.MainPage"
+             Title="Particle Buttons">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+"
+                     Clicked="OnAddedClicked" />
+        <ToolbarItem Text="?"
+                     Clicked="OnHelpClicked" />
+    </ContentPage.ToolbarItems>
+    
+    <StackLayout >
+
+        <!--<ListView x:Name="listView" ItemSelected="OnListViewItemSelected" RowHeight="160">-->
+        <ListView x:Name="listView" RowHeight="160" SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Button Text="{Binding pFunc.ButtonName}" CommandParameter="{Binding}"
+                                Clicked="ButtonClickedCallFunction" 
+                                VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" 
+                                WidthRequest="250" HeightRequest="200" Margin="10"  IsEnabled="{Binding pFunc.Enabled}"
+                                BorderColor="Black" BorderRadius="40" BorderWidth="5"></Button>
+                            <ImageButton Source="SettingsIcon" CommandParameter="{Binding}" WidthRequest="{OnPlatform iOS=40, Android=30}" 
+                                HeightRequest="30" Margin="20" HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand" Clicked="ButtonClickedSettings" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <!-- Footer -->
+        <Grid BackgroundColor="DarkGray">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="90" />
+            </Grid.ColumnDefinitions>
+            <ScrollView>
+                <Label x:Name="lblStatus"  Text="status" LineBreakMode="WordWrap" Grid.Column="0"  Grid.Row="0"></Label>
+            </ScrollView>            
+            <Button Text="Clear" Grid.Column="1" Grid.Row="0" WidthRequest="90" Clicked="ButtonClickedClearLog" />
+        </Grid>
+
+    </StackLayout>
+</ContentPage>

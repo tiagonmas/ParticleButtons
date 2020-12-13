@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             x:Class="ParticleButtons.SettingsPage"
+             Title="Particle Button Details">
+    <StackLayout Margin="20">
+        <Label Text="Button Name" />
+        <Entry Text="{Binding Path=pFunc.ButtonName}" 
+               Placeholder="Enter name for button" />
+
+        <Label Text="Function Name" />
+        <Entry Text="{Binding Path=pFunc.FuncName}" 
+               Placeholder="Enter function name" />
+
+        <Label Text="Token" />
+        <Entry Text="{Binding Path=pFunc.Token}" Keyboard="Text"
+               Placeholder="Enter security token to call function" />
+
+        <Label Text="Device ID" />
+        <Entry Text="{Binding Path=pFunc.DeviceId}"  Keyboard="Numeric"
+               Placeholder="Enter the Device ID" />
+
+        <Label Text="Function Arguments" />
+        <Entry Text="{Binding Path=pFunc.Args}" 
+               Placeholder="Enter function arguments" />
+
+        <Label Text="Enabled" />
+        <Switch IsToggled="{Binding Path=pFunc.Enabled}"></Switch> 
+
+        <Label Text="Order to show button in App (Lower is first)" />
+        <Entry Text="{Binding Path=pFunc.Order}" Keyboard="Numeric"
+               Placeholder="Enter a number to be used to order buttons" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Text="Save" 
+                    Clicked="OnSaveButtonClicked" />
+            <Button Grid.Column="1" x:Name="btnDelete"
+                    Text="Delete" 
+                    Clicked="OnDeleteButtonClicked"/>
+            <Button Grid.Column="2" x:Name="btnCopy"
+                    Text="Copy" 
+                    Clicked="OnCopyButtonClicked"/>
+        </Grid>
+    </StackLayout>
+</ContentPage>
+
+    
