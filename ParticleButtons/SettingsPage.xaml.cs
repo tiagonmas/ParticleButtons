@@ -2,8 +2,9 @@
 using System.IO;
 using Xamarin.Forms;
 using ParticleButtons.Models;
-using System.Runtime.Serialization.Json;
 using System.Linq;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace ParticleButtons
 {
@@ -27,6 +28,7 @@ namespace ParticleButtons
 
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
+            Analytics.TrackEvent("OnSaveButtonClicked");
             string filename;
             
             var pfbut = (pfButtons)BindingContext;
@@ -49,6 +51,7 @@ namespace ParticleButtons
 
         async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
+            Analytics.TrackEvent("OnDeleteButtonClicked");
             var btns = (pfButtons)BindingContext;
 
             if (File.Exists(btns.Filename))
@@ -61,6 +64,7 @@ namespace ParticleButtons
 
         async void OnCopyButtonClicked(object sender, EventArgs e)
         {
+            Analytics.TrackEvent("OnCopyButtonClicked");
 
             var pfbut = (pfButtons)BindingContext;
             pfbut.Filename = String.Empty;

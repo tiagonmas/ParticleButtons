@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using ParticleButtons.Models;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 
 namespace ParticleButtons
@@ -46,7 +49,6 @@ namespace ParticleButtons
                     RequestUri = pfuri
                 };
 
-                //requestMessage.Content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                 requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", pFunc.Token);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
 
@@ -54,21 +56,21 @@ namespace ParticleButtons
 
                 if (response.IsSuccessStatusCode)
                 {
+                    Analytics.TrackEvent("response.Ok");
                     string content = await response.Content.ReadAsStringAsync();
                     pfRet = JsonConvert.DeserializeObject<ParticleFunctionReturn>(content);
                     pfRet.Error = false;
                 }
                 else
                 {
+                    Analytics.TrackEvent("response.Error");
                     pfRet.Error = true;
                     pfRet.ErrorDetail = response.ToString();   
                 }
             }
             catch (Exception ex)
             {
-                //To Do
-                throw (ex);
-                
+                Crashes.TrackError(ex);               
             }
 
             return pfRet;

@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Xamarin.Essentials;
 using Android.Provider;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace ParticleButtons
 {
@@ -19,39 +21,9 @@ namespace ParticleButtons
             InitializeComponent();
             rest = new RestService();
 
-
         }
 
-        /// <summary>
-        /// Control how many times buttons have been used, to force in app purchase
-        /// </summary>
-        /// <returns></returns>
-        internal bool IncAppCounter()
-        {
-            try
-            {
-                string appCounter = SecureStorage.GetAsync("appCounter").Result;
-                
-                if (appCounter == null)
-                {
-                    SecureStorage.SetAsync("appCounter", "1");
-                }
-                else
-                {
-                    int count = Convert.ToInt32(appCounter);
-                    if (count > 20)
-                    {
-                        return false;
-                    }
-                    SecureStorage.SetAsync("appCounter", (count + 1).ToString());
-                }
-            }
-            catch (Exception ex)
-            {
-                // Possible that device doesn't support secure storage on device.
-            }
-            return true;
-        }
+       
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -77,10 +49,57 @@ namespace ParticleButtons
             listView.ItemsSource = pfBtns
                 .OrderBy(d => d.pFunc.Order)
                 .ToList();
+
+            // First time ever launched application
+            var firstLaunch = VersionTracking.IsFirstLaunchEver;
+
+            // First time launching current version
+            var firstLaunchCurrent = VersionTracking.IsFirstLaunchForCurrentVersion;
+
+            // First time launching current build
+            var firstLaunchBuild = VersionTracking.IsFirstLaunchForCurrentBuild;
+
+            // Current app version (2.0.0)
+            var currentVersion = VersionTracking.CurrentVersion;
+        }
+
+
+        /// <summary>
+        /// Control how many times buttons have been used, to force in app purchase
+        /// </summary>
+        /// <returns></returns>
+        internal bool IncAppCounter()
+        {
+            try
+            {
+                string appCounter = SecureStorage.GetAsync("appCounter").Result;
+
+                if (appCounter == null)
+                {
+                    SecureStorage.SetAsync("appCounter", "1");
+                }
+                else
+                {
+                    int count = Convert.ToInt32(appCounter);
+                    if (count > 20)
+                    {
+                        return false;
+                    }
+                    SecureStorage.SetAsync("appCounter", (count + 1).ToString());
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // Possible that device doesn't support secure storage on device.
+                Crashes.TrackError(new Exception("IncAppCounter", ex));
+            }
+            return true;
         }
 
         async void OnAddedClicked(object sender, EventArgs e)
         {
+            Analytics.TrackEvent("OnAddedClicked");
             await Navigation.PushAsync(new SettingsPage
             {
                 BindingContext = new pfButtons()
@@ -89,12 +108,14 @@ namespace ParticleButtons
 
         async void OnHelpClicked(object sender, EventArgs e)
         {
+            Analytics.TrackEvent("OnHelpClicked");
             try
             {
                 await Xamarin.Essentials.Browser.OpenAsync("http://www.github.com", BrowserLaunchMode.SystemPreferred);
             }
             catch (Exception ex)
             {
+                Crashes.TrackError(new Exception("OnHelpClicked",ex));
                 // An unexpected error occured. No browser may be installed on the device.
                 lblStatus.Text = "Error " + ex.ToString();
             }
@@ -102,6 +123,7 @@ namespace ParticleButtons
 
         public async void ButtonClickedSettings(object sender, System.EventArgs e)
         {
+            Analytics.TrackEvent("ButtonClickedSettings");
             var btn = (ImageButton)sender;
             var pf = btn.CommandParameter as pfButtons;
             await Navigation.PushAsync(new SettingsPage
@@ -112,10 +134,12 @@ namespace ParticleButtons
        
         public void ButtonClickedClearLog(object sender, System.EventArgs e) 
         {
+            Analytics.TrackEvent("ButtonClickedClearLog");
             lblStatus.Text = "";
         }
         public async void ButtonClickedCallFunction(object sender, System.EventArgs e)
         {
+            Analytics.TrackEvent("ButtonClickedCallFunction");
             if (!IncAppCounter())
             {
                 lblStatus.Text = "Exceeded uses. Please buy license";
@@ -149,6 +173,7 @@ namespace ParticleButtons
                 }
                 catch (Exception exc)
                 {
+                    Crashes.TrackError(exc);
                     btn.IsEnabled = true;
                     lblStatus.Text = "Error:" + exc.ToString();
                     throw;
