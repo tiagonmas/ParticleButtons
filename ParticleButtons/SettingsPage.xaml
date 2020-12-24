@@ -17,7 +17,7 @@
                Placeholder="Enter security token to call function" />
 
         <Label Text="Device ID" />
-        <Entry Text="{Binding Path=pFunc.DeviceId}"  Keyboard="Numeric"
+        <Entry Text="{Binding Path=pFunc.DeviceId}"  Keyboard="Text"
                Placeholder="Enter the Device ID" />
 
         <Label Text="Function Arguments" />

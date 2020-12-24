@@ -53,11 +53,12 @@ namespace ParticleButtons
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
 
                 HttpResponseMessage response = await client.SendAsync(requestMessage);
+                string content = response.Content.ReadAsStringAsync().Result;
 
                 if (response.IsSuccessStatusCode)
                 {
                     Analytics.TrackEvent("response.Ok");
-                    string content = await response.Content.ReadAsStringAsync();
+                    
                     pfRet = JsonConvert.DeserializeObject<ParticleFunctionReturn>(content);
                     pfRet.Error = false;
                 }
@@ -65,7 +66,21 @@ namespace ParticleButtons
                 {
                     Analytics.TrackEvent("response.Error");
                     pfRet.Error = true;
-                    pfRet.ErrorDetail = response.ToString();   
+                    //var ErrResult = response.Content.ReadAsStringAsync().Result;
+                    if (!String.IsNullOrEmpty(content))
+                    {
+                        ParticleFunctionError pfErr = JsonConvert.DeserializeObject<ParticleFunctionError>(content);
+                        if (String.IsNullOrEmpty(pfErr.info))
+                        {
+                            pfRet.ErrorDetail = pfErr.error;
+                        }
+                        else
+                        {
+                            pfRet.ErrorDetail = pfErr.error + " : " + pfErr.info;
+                        }
+                        
+                    }
+
                 }
             }
             catch (Exception ex)

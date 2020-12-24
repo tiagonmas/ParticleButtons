@@ -11,13 +11,14 @@
     </ContentPage.ToolbarItems>
     
     <StackLayout >
-
-        <!--<ListView x:Name="listView" ItemSelected="OnListViewItemSelected" RowHeight="160">-->
+        <!--<ActivityIndicator x:Name="activity1" Color="Black" IsRunning="true" />-->
+        <StackLayout x:Name="messages"></StackLayout>
         <ListView x:Name="listView" RowHeight="160" SelectionMode="None">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Orientation="Horizontal">
+                            <ActivityIndicator Color="CornflowerBlue" IsRunning="{Binding Running, Mode=TwoWay}" IsVisible="true" />
                             <Button Text="{Binding pFunc.ButtonName}" CommandParameter="{Binding}"
                                 Clicked="ButtonClickedCallFunction" 
                                 VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" 

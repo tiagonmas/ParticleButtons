@@ -42,6 +42,7 @@ namespace ParticleButtons
                 
                 var pFunc=JsonConvert.DeserializeObject<ParticleFunction>(pfb.Text);
                 pfb.pFunc = pFunc;
+                pfb.Running = false;
 
                 pfBtns.Add(pfb);
             }
@@ -63,6 +64,33 @@ namespace ParticleButtons
             var currentVersion = VersionTracking.CurrentVersion;
         }
 
+
+        /// <summary>
+        /// Add a messagen when we receive a push notification
+        /// </summary>
+        /// <param name="message"></param>
+        public void AddMessage(string message)
+        {
+            lblStatus.Text = "Push: " + message;
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                if (messages.Children.OfType<Label>().Where(c => c.Text == message).Any())
+                {
+                    // Do nothing, an identical message already exists
+                }
+                else
+                {
+                    Label label = new Label()
+                    {
+                        Text = message,
+                        HorizontalOptions = LayoutOptions.CenterAndExpand,
+                        VerticalOptions = LayoutOptions.Start
+                    };
+                    messages.Children.Add(label);
+                }
+            });
+        }
 
         /// <summary>
         /// Control how many times buttons have been used, to force in app purchase
@@ -126,6 +154,7 @@ namespace ParticleButtons
             Analytics.TrackEvent("ButtonClickedSettings");
             var btn = (ImageButton)sender;
             var pf = btn.CommandParameter as pfButtons;
+            
             await Navigation.PushAsync(new SettingsPage
             {
                 BindingContext = pf
@@ -139,6 +168,7 @@ namespace ParticleButtons
         }
         public async void ButtonClickedCallFunction(object sender, System.EventArgs e)
         {
+            
             Analytics.TrackEvent("ButtonClickedCallFunction");
             if (!IncAppCounter())
             {
@@ -149,7 +179,10 @@ namespace ParticleButtons
             var btn = (Button)sender;
             btn.IsEnabled = false;
             
+            var actualColor = btn.BackgroundColor;
+
             var pf = btn.CommandParameter as pfButtons;
+            pf.Running = true;
 
             lblStatus.Text = "Calling " + pf.pFunc.ButtonName;
 
@@ -163,12 +196,17 @@ namespace ParticleButtons
                     btn.IsEnabled = true;
                     if (!ret.Error)
                     {
+                        await btn.ChangeBackgroundColorTo(Color.Green, 550, Easing.CubicOut);
+                        await btn.ChangeBackgroundColorTo(actualColor, 500, Easing.SinOut);
                         lblStatus.Text = pf.pFunc.ButtonName +" returned " + ret.Return_value;
                     }
                     else {
+                        // Here is the effective use of the smooth background color change animation
+                        await btn.ChangeBackgroundColorTo(Color.Red, 550, Easing.CubicOut);
+                        await btn.ChangeBackgroundColorTo(actualColor, 500, Easing.SinOut);
+
                         lblStatus.Text = "Error calling " + pf.pFunc.ButtonName + "\n" + ret.ErrorDetail;
                     }
-                    
 
                 }
                 catch (Exception exc)
@@ -178,6 +216,7 @@ namespace ParticleButtons
                     lblStatus.Text = "Error:" + exc.ToString();
                     throw;
                 }
+                pf.Running = false;
             }
 
         }
