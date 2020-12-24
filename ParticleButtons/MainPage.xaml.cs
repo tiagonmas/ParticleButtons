@@ -139,7 +139,7 @@ namespace ParticleButtons
             Analytics.TrackEvent("OnHelpClicked");
             try
             {
-                await Xamarin.Essentials.Browser.OpenAsync("http://www.github.com", BrowserLaunchMode.SystemPreferred);
+                await Xamarin.Essentials.Browser.OpenAsync("https://github.com/tiagonmas/ParticleButtonsApp", BrowserLaunchMode.SystemPreferred);
             }
             catch (Exception ex)
             {

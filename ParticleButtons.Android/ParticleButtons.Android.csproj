@@ -19,6 +19,11 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <AndroidKeyStore>True</AndroidKeyStore>
+    <AndroidSigningKeyStore>filename.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>Berlenga9.</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>keystore.alias</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>Berlenga9.</AndroidSigningKeyPass>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
