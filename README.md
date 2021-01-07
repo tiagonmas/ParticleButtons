@@ -18,8 +18,8 @@ This is where you give the details of the button. It's name, and the details of 
 In the settings screen you have to fill in several fields:
 1. Button Name - 
 2. Function Name - The name of the function that will be called. As defined in your firmware code (eg: Particle.function("garage", garage));
-3. Token - The Auth token to call the particle function.
-4. Device ID - The id ID of your device that you want to call. 
+3. Token - The Auth token to call the particle function. Check [docs](https://docs.particle.io/tutorials/device-cloud/authentication/#access-tokens)
+4. Device ID - The id ID of your device that you want to call. Check your [console](https://console.particle.io/devices) for the Device Id.
 5. Function Arguments - The arguments that are passed to the cloud function
 6. Enabled - If the button is enabled in the main screen. If disabled the cloud funcion will not be called.
 7. Order - to control how multiple buttons show up in the main screen. Lower numbers show first.
