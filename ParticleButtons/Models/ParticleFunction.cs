@@ -13,6 +13,16 @@ namespace ParticleButtons.Models
         {
             serializer = new DataContractJsonSerializer(typeof(ParticleFunction));
         }
+
+        public bool Validate() {
+            if (String.IsNullOrEmpty(FuncName) ||
+                String.IsNullOrEmpty(ButtonName) ||
+                String.IsNullOrEmpty(Token) ||
+                String.IsNullOrEmpty(DeviceId))
+                return false;
+            else return true;
+        }
+
         public string ButtonName { get; set; }
         public string FuncName { get; set; }
      

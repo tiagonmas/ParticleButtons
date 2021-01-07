@@ -14,6 +14,11 @@ namespace ParticleButtons.Models
             pFunc.Order = 100;
             pFunc.Saved = false;
         }
+
+        public bool Validate()
+        {
+            return pFunc.Validate();
+        }
         public string Filename { get; set; }
         public string Text { get; set; }
         public DateTime Date { get; set; }

@@ -3,15 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ParticleButtons.MainPage"
              Title="Particle Buttons">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="+"
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="Add"
                      Clicked="OnAddedClicked" />
-        <ToolbarItem Text="?"
+        <ToolbarItem Text="Help"
                      Clicked="OnHelpClicked" />
     </ContentPage.ToolbarItems>
     
     <StackLayout >
         <!--<ActivityIndicator x:Name="activity1" Color="Black" IsRunning="true" />-->
+        <StackLayout x:Name="lblWelcome" IsVisible="true" Margin="70" Spacing="20">
+            <Label>Hi!</Label>
+            <Label>Welcome to the Particle Buttons App.</Label>
+            <Label>Start by clicking the "Add" (above to the right) to add your first button</Label>
+        </StackLayout>
         <StackLayout x:Name="messages"></StackLayout>
         <ListView x:Name="listView" RowHeight="160" SelectionMode="None">
             <ListView.ItemTemplate>
@@ -22,7 +27,7 @@
                             <Button Text="{Binding pFunc.ButtonName}" CommandParameter="{Binding}"
                                 Clicked="ButtonClickedCallFunction" 
                                 VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" 
-                                WidthRequest="250" HeightRequest="200" Margin="10"  IsEnabled="{Binding pFunc.Enabled}"
+                                WidthRequest="200" HeightRequest="200" Margin="10"  IsEnabled="{Binding pFunc.Enabled}"
                                 BorderColor="Black" BorderRadius="40" BorderWidth="5"></Button>
                             <ImageButton Source="SettingsIcon" CommandParameter="{Binding}" WidthRequest="{OnPlatform iOS=40, Android=30}" 
                                 HeightRequest="30" Margin="20" HorizontalOptions="Center"

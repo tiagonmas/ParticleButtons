@@ -3,33 +3,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="ParticleButtons.SettingsPage"
              Title="Particle Button Details">
+    
     <StackLayout Margin="20">
-        <Label Text="Button Name" />
-        <Entry Text="{Binding Path=pFunc.ButtonName}" 
-               Placeholder="Enter name for button" />
+        <ScrollView>
+            <StackLayout Margin="20" >
+                <Label Text="Button Name" />
+                <Entry Text="{Binding Path=pFunc.ButtonName}" 
+               Placeholder="Enter name for button" Focused="Entry_Focused"/>
 
-        <Label Text="Function Name" />
-        <Entry Text="{Binding Path=pFunc.FuncName}" 
-               Placeholder="Enter function name" />
+                <Label Text="Function Name" />
+                <Entry Text="{Binding Path=pFunc.FuncName}" 
+               Placeholder="Enter function name" Focused="Entry_Focused"/>
 
-        <Label Text="Token" />
-        <Entry Text="{Binding Path=pFunc.Token}" Keyboard="Text"
-               Placeholder="Enter security token to call function" />
+                <Label Text="Token" />
+                <Entry Text="{Binding Path=pFunc.Token}" Keyboard="Text"
+               Placeholder="Enter security token to call function" Focused="Entry_Focused"/>
 
-        <Label Text="Device ID" />
-        <Entry Text="{Binding Path=pFunc.DeviceId}"  Keyboard="Text"
-               Placeholder="Enter the Device ID" />
+                <Label Text="Device ID" />
+                <Entry Text="{Binding Path=pFunc.DeviceId}"  Keyboard="Text"
+               Placeholder="Enter the Device ID" Focused="Entry_Focused"/>
 
-        <Label Text="Function Arguments" />
-        <Entry Text="{Binding Path=pFunc.Args}" 
-               Placeholder="Enter function arguments" />
+                <Label Text="Function Arguments" />
+                <Entry Text="{Binding Path=pFunc.Args}" 
+               Placeholder="Enter function arguments" Focused="Entry_Focused"/>
 
-        <Label Text="Enabled" />
-        <Switch IsToggled="{Binding Path=pFunc.Enabled}"></Switch> 
+                <Label Text="Enabled" />
+                <Switch IsToggled="{Binding Path=pFunc.Enabled}"></Switch>
 
-        <Label Text="Order to show button in App (Lower is first)" />
-        <Entry Text="{Binding Path=pFunc.Order}" Keyboard="Numeric"
+                <Label Text="Order to show button in App (Lower is first)" />
+                <Entry Text="{Binding Path=pFunc.Order}" Keyboard="Numeric"
                Placeholder="Enter a number to be used to order buttons" />
+            </StackLayout>
+        </ScrollView>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -45,7 +50,21 @@
                     Text="Copy" 
                     Clicked="OnCopyButtonClicked"/>
         </Grid>
+        <Grid BackgroundColor="DarkGray" IsVisible="false" x:Name="gridStatus">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="90" />
+            </Grid.ColumnDefinitions>
+            <ScrollView>
+                <Label x:Name="lblStatus"  Text="status" LineBreakMode="WordWrap" Grid.Column="0"  Grid.Row="0"></Label>
+            </ScrollView>
+            <Button Text="Clear" Grid.Column="1" Grid.Row="0" WidthRequest="90" Clicked="ButtonClickedClearLog" />
+        </Grid>
     </StackLayout>
+    
 </ContentPage>
 
     

@@ -31,6 +31,8 @@ namespace ParticleButtons
             var pfBtns = new List<pfButtons>();
 
             var files = Directory.EnumerateFiles(App.FolderPath, "*.txt");
+            bool showWelcome = true;
+            
             foreach (var filename in files)
             {
                 pfButtons pfb= new pfButtons
@@ -45,12 +47,16 @@ namespace ParticleButtons
                 pfb.Running = false;
 
                 pfBtns.Add(pfb);
+                showWelcome = false;
             }
+
+            lblWelcome.IsVisible = showWelcome;
 
             listView.ItemsSource = pfBtns
                 .OrderBy(d => d.pFunc.Order)
                 .ToList();
 
+            
             // First time ever launched application
             var firstLaunch = VersionTracking.IsFirstLaunchEver;
 
