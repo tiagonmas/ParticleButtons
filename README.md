@@ -10,11 +10,28 @@ If you have any issues using the app, please create a [new issue](https://github
 # How to use the App
 
 ## First Run
+When you first open the app, you're invited to create the first button. You need to click "Add" on the top of the screen, that will take you to the Button Settings screen.
 
 ## Button Settings
+This is where you give the details of the button. It's name, and the details of the particle.io [function](https://docs.particle.io/reference/device-cloud/api/#call-a-function).
+
+In the settings screen you have to fill in several fields:
+1. Button Name - 
+2. Function Name - The name of the function that will be called. As defined in your firmware code (eg: Particle.function("garage", garage));
+3. Token - The Auth token to call the particle function.
+4. Device ID - The id ID of your device that you want to call. 
+5. Function Arguments - The arguments that are passed to the cloud function
+6. Enabled - If the button is enabled in the main screen. If disabled the cloud funcion will not be called.
+7. Order - to control how multiple buttons show up in the main screen. Lower numbers show first.
+
+Example:
+<br><img src="https://github.com/tiagonmas/ParticleButtons/blob/main/Docs/settings.png" width="400">
+
 
 ## Main screen
 After you added your first button, the button will show up in the main screen.
+<br>
+<img src="https://github.com/tiagonmas/ParticleButtons/blob/main/Docs/mainpage.png" width="400">
 
 
 
