@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Xamarin.Essentials;
 
 namespace ParticleButtons
 {
@@ -14,6 +15,7 @@ namespace ParticleButtons
         public App()
         {
             InitializeComponent();
+            VersionTracking.Track();
             FolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
             MainPage = new NavigationPage(new MainPage());
         }

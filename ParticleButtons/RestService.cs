@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using ParticleButtons.Models;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 
 namespace ParticleButtons
@@ -46,29 +49,43 @@ namespace ParticleButtons
                     RequestUri = pfuri
                 };
 
-                //requestMessage.Content.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
                 requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", pFunc.Token);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
 
                 HttpResponseMessage response = await client.SendAsync(requestMessage);
+                string content = response.Content.ReadAsStringAsync().Result;
 
                 if (response.IsSuccessStatusCode)
                 {
-                    string content = await response.Content.ReadAsStringAsync();
+                    Analytics.TrackEvent("response.Ok");
+                    
                     pfRet = JsonConvert.DeserializeObject<ParticleFunctionReturn>(content);
                     pfRet.Error = false;
                 }
                 else
                 {
+                    Analytics.TrackEvent("response.Error");
                     pfRet.Error = true;
-                    pfRet.ErrorDetail = response.ToString();   
+                    //var ErrResult = response.Content.ReadAsStringAsync().Result;
+                    if (!String.IsNullOrEmpty(content))
+                    {
+                        ParticleFunctionError pfErr = JsonConvert.DeserializeObject<ParticleFunctionError>(content);
+                        if (String.IsNullOrEmpty(pfErr.info))
+                        {
+                            pfRet.ErrorDetail = pfErr.error;
+                        }
+                        else
+                        {
+                            pfRet.ErrorDetail = pfErr.error + " : " + pfErr.info;
+                        }
+                        
+                    }
+
                 }
             }
             catch (Exception ex)
             {
-                //To Do
-                throw (ex);
-                
+                Crashes.TrackError(ex);               
             }
 
             return pfRet;

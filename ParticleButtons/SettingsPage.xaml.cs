@@ -2,8 +2,9 @@
 using System.IO;
 using Xamarin.Forms;
 using ParticleButtons.Models;
-using System.Runtime.Serialization.Json;
 using System.Linq;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace ParticleButtons
 {
@@ -25,9 +26,17 @@ namespace ParticleButtons
             if (!pfb.pFunc.Saved) { btnDelete.IsEnabled = false;btnCopy.IsEnabled = false; }
         }
 
+        private void ButtonClickedClearLog(object sender, System.EventArgs e)
+        {
+            Analytics.TrackEvent("ButtonClickedClearLogSettings");
+            lblStatus.Text = "";
+        }
+
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
+            Analytics.TrackEvent("OnSaveButtonClicked");
             string filename;
+            
             
             var pfbut = (pfButtons)BindingContext;
 
@@ -40,15 +49,25 @@ namespace ParticleButtons
                 filename = pfbut.Filename;
             }
 
-            pfbut.pFunc.Saved = true;
-            var json = pfbut.pFunc.ToJson();
+            if (!pfbut.Validate()) {
+                gridStatus.IsVisible = true;
+
+                lblStatus.Text = "All fields except Arguments are mandatory";
+                
+            }
+            else { 
+
+                pfbut.pFunc.Saved = true;
+                var json = pfbut.pFunc.ToJson();
             
-            File.WriteAllText(filename, json);
-            await Navigation.PopAsync();
+                File.WriteAllText(filename, json);
+                await Navigation.PopAsync();
+            }
         }
 
         async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
+            Analytics.TrackEvent("OnDeleteButtonClicked");
             var btns = (pfButtons)BindingContext;
 
             if (File.Exists(btns.Filename))
@@ -61,6 +80,7 @@ namespace ParticleButtons
 
         async void OnCopyButtonClicked(object sender, EventArgs e)
         {
+            Analytics.TrackEvent("OnCopyButtonClicked");
 
             var pfbut = (pfButtons)BindingContext;
             pfbut.Filename = String.Empty;
@@ -74,6 +94,13 @@ namespace ParticleButtons
             {
                 BindingContext = pfbut
             });
+        }
+
+
+        private void Entry_Focused(object sender, FocusEventArgs e)
+        {
+            lblStatus.Text = "";
+            gridStatus.IsVisible = false;
         }
     }
 }
