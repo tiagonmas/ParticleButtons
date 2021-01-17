@@ -136,6 +136,14 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\SettingsIcon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\error.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidAsset>
+    <AndroidAsset Include="Assets\ok.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidAsset>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

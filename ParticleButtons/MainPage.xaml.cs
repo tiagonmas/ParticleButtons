@@ -10,20 +10,32 @@ using Xamarin.Essentials;
 using Android.Provider;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using System.Reflection;
 
 namespace ParticleButtons
 {
     public partial class MainPage : ContentPage
     {
         RestService rest;
+        Plugin.SimpleAudioPlayer.ISimpleAudioPlayer playerErr;
+        Plugin.SimpleAudioPlayer.ISimpleAudioPlayer playerOk;
+
         public MainPage()
         {
             InitializeComponent();
             rest = new RestService();
 
+
+
+
+            playerErr = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+            playerErr.Load("error.mp3");
+
+            playerOk = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.CreateSimpleAudioPlayer();
+            playerOk.Load("ok.mp3");
         }
 
-       
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -68,6 +80,12 @@ namespace ParticleButtons
 
             // Current app version (2.0.0)
             var currentVersion = VersionTracking.CurrentVersion;
+
+
+
+
+
+
         }
 
 
@@ -202,16 +220,21 @@ namespace ParticleButtons
                     btn.IsEnabled = true;
                     if (!ret.Error)
                     {
+                        playerOk.Play();
                         await btn.ChangeBackgroundColorTo(Color.Green, 550, Easing.CubicOut);
                         await btn.ChangeBackgroundColorTo(actualColor, 500, Easing.SinOut);
                         lblStatus.Text = pf.pFunc.ButtonName +" returned " + ret.Return_value;
+                        
                     }
                     else {
+                        playerErr.Play();
+
                         // Here is the effective use of the smooth background color change animation
                         await btn.ChangeBackgroundColorTo(Color.Red, 550, Easing.CubicOut);
                         await btn.ChangeBackgroundColorTo(actualColor, 500, Easing.SinOut);
 
                         lblStatus.Text = "Error calling " + pf.pFunc.ButtonName + "\n" + ret.ErrorDetail;
+                        
                     }
 
                 }
